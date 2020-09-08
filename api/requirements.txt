@@ -1,0 +1,5 @@
+flask
+flask_cors
+flask_json
+flask_mysql_connector
+jsonpickle

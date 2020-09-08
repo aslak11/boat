@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  api:
+    image: api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+
+  client:
+    image: client
+    ports:
+      - '80:80'
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - "REACT_APP_API_URL=http://localhost:5000"
+
+
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=Test1234@
+      - MYSQL_DATABASE=traineeboats
+    ports:
+      - '3306:3306'
+    image: 'mysql:latest'
+    volumes:
+      - ./mysql/etc /etc/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d/:ro
+    #      - ./sql:/sql
+    #      - ./sql/var:/var/lib/mysql
+    #      - ./sql/etc:/etc/mysql
+    #    working_dir: /sql
+    #    command: sh -c '(/usr/local/bin/docker-entrypoint.sh mysqld &) ; chmod +x ./entrypoint.sh; ./entrypoint.sh ; wait; while true; do sleep 1; done'
+    healthcheck:
+      test: "mysqlshow -u root --password=Test1234@ traineeboats"
+      interval: 2s
+      timeout: 20s
+      retries: 10
