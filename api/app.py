@@ -6,7 +6,7 @@ import urllib.request
 
 import jsonpickle as jsonpickle
 from flask import Flask, flash, request, redirect, render_template, make_response, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 import random
 import string
@@ -16,7 +16,7 @@ from flask_json import FlaskJSON, JsonError, json_response, as_json
 
 app = Flask(__name__)
 FlaskJSON(app)
-app.config['MYSQL_HOST'] = 'mysql'
+# app.config['MYSQL_HOST'] = 'mysql'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Test1234@'
 app.config['MYSQL_DATABASE'] = 'traineeboats'
@@ -25,7 +25,7 @@ CORS(app)
 
 app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = "./uploads/"
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+# app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.mkdir(app.config['UPLOAD_FOLDER'])
@@ -44,6 +44,7 @@ def allowed_file(filename):
 
 
 @app.route('/api/list', methods=['GET'])
+@cross_origin()
 def list1():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM dim_vessel")
@@ -59,6 +60,7 @@ def list1():
 
 
 @app.route('/api/list', methods=['DELETE'])
+@cross_origin()
 def delete():
     rows = tuple(request.get_json())
     cursor = mysql.connection.cursor()
@@ -72,6 +74,7 @@ def delete():
 
 
 @app.route('/api/get_vessel', methods=['GET'])
+@cross_origin()
 def get_vessel():
     q = request.args.get("q") or ""
     page = int(request.args.get("page") or 0)
@@ -112,6 +115,7 @@ def get_vessel():
 
 
 @app.route('/api/upload', methods=['GET', 'POST'])
+@cross_origin()
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
