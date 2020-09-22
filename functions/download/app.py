@@ -11,7 +11,7 @@ import mysql.connector
 from tqdm import tqdm
 import pandas as pd
 
-sql = mysql.connector.connect(host="localhost", user='root', password="Test1234@", database='traineeboats')
+sql = mysql.connector.connect(host="35.225.167.134", user='aslak', password="RPJ6S8P6ah4ewrca", database='vessel')
 
 rootUrl = 'ftp.ais.dk'
 with ftplib.FTP(rootUrl) as ftp:
