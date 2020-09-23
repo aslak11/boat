@@ -1,6 +1,16 @@
 version: '3.1'
 
 services:
+  download:
+    image: boat_download
+    build:
+      context: ./functions/download
+      dockerfile: Dockerfile
+    environment:
+      - MYSQL_HOST=mysql
+    depends_on:
+      - mysql
+
   api:
     image: api
     build:
